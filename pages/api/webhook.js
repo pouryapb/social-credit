@@ -24,7 +24,7 @@ bot.telegram.setWebhook(url);
 bot.on("sticker", (ctx) => {
   if (["group", "supergroup"].includes(ctx.chat.type)) {
     ctx.replyWithMarkdownV2(
-      `message.reply_to_message: \`${JSON.stringify(
+      `message\.reply_to_message: \`${JSON.stringify(
         ctx.message.reply_to_message
       )}\``
     );
