@@ -21,7 +21,9 @@ bot.telegram.setWebhook(url);
 
 bot.on("sticker", (ctx) => {
   if (["group", "supergroup"].includes(ctx.chat.type)) {
-    ctx.replyWithMarkdownV2(`Sticker data: \`${JSON.stringify(ctx.sticker)}\``);
+    ctx.replyWithMarkdownV2(
+      `Sticker data: \`${JSON.stringify(ctx.message.sticker)}\``
+    );
   } else {
     ctx.reply("I only understand stickers in groups!");
   }
