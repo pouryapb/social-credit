@@ -3,7 +3,6 @@ import { json } from "micro";
 
 const token = process.env.BOT_TOKEN;
 const url = process.env.NEXT_PUBLIC_VERCEL_URL + "/webhook";
-console.log(url);
 
 if (token === undefined) {
   throw new Error("BOT_TOKEN must be provided!");
@@ -18,6 +17,7 @@ bot.on("text", (ctx) => {
 bot.catch((err) => console.log("Ooops", err));
 
 module.exports = async function (req, res) {
+  console.log(url);
   try {
     const body = await json(req);
     console.log(body);
