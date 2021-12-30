@@ -8,6 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "micro": "^9.3.4",
     "mongoose": "^6.1.4",
     "next": "12.0.7",
     "react": "17.0.2",
