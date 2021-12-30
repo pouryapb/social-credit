@@ -11,7 +11,7 @@ const bot = new Telegraf(token);
 bot.telegram.setWebhook(url);
 
 bot.on("text", (ctx) => {
-  ctx.reply("Hello World!");
+  ctx.reply("just to be 100% sure");
 });
 
 export default async function handler(req, res) {
