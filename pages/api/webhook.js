@@ -1,5 +1,4 @@
 import { Telegraf } from "telegraf";
-import { json } from "micro";
 
 const token = process.env.BOT_TOKEN;
 const url = process.env.NEXT_PUBLIC_VERCEL_URL + "/webhook";
@@ -9,25 +8,16 @@ if (token === undefined) {
 }
 
 const bot = new Telegraf(token, { telegram: { webhookReply: false } });
+bot.telegram.setWebhook(url);
 
 bot.on("text", (ctx) => {
   ctx.reply("Hello World!");
 });
 
-bot.catch((err) => console.log("Ooops", err));
-
-module.exports = async function (req, res) {
-  console.log(url);
+export default async function handler(req, res) {
   try {
-    const body = await json(req);
-    console.log(body);
-    bot.handleUpdate(body);
-    res.statusCode = 200;
-    res.end("");
-  } catch (e) {
-    res.statusCode = 500;
-    res.setHeader("Content-Type", "text/html");
-    res.end("<h1>Server Error</h1><p>Sorry, there was a problem</p>");
-    console.error(e.message);
+    await bot.handleUpdate(req.body);
+  } finally {
+    res.status(200).end();
   }
-};
+}
