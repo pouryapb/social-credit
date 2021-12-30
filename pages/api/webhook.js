@@ -15,6 +15,7 @@ bot.on("text", (ctx) => {
 });
 
 export default async function handler(req, res) {
+  console.log(url);
   try {
     await bot.handleUpdate(req.body);
   } finally {
