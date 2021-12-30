@@ -6,6 +6,8 @@ import Chat from "../../models/chat";
 const token = process.env.BOT_TOKEN;
 const url = process.env.VERCEL_URL + "/api/webhook";
 const dbUrl = process.env.DB_URL;
+const creditUpId = process.env.CREDIT_UP_ID;
+const creditDownId = process.env.CREDIT_DOWN_ID;
 
 if (token === undefined) {
   throw new Error("BOT_TOKEN must be provided!");
@@ -22,7 +24,9 @@ bot.telegram.setWebhook(url);
 bot.on("sticker", (ctx) => {
   if (["group", "supergroup"].includes(ctx.chat.type)) {
     ctx.replyWithMarkdownV2(
-      `Sticker data: \`${JSON.stringify(ctx.message.sticker)}\``
+      `message.reply_to_message: \`${JSON.stringify(
+        ctx.message.reply_to_message
+      )}\``
     );
   } else {
     ctx.reply("I only understand stickers in groups!");
