@@ -2,7 +2,8 @@ import { Telegraf } from "telegraf";
 import { json } from "micro";
 
 const token = process.env.BOT_TOKEN;
-const url = process.env.VERCEL_URL + "webhook";
+const url = process.env.NEXT_PUBLIC_VERCEL_URL + "/webhook";
+console.log(url);
 
 if (token === undefined) {
   throw new Error("BOT_TOKEN must be provided!");
