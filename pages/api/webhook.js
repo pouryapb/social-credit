@@ -7,7 +7,7 @@ if (token === undefined) {
   throw new Error("BOT_TOKEN must be provided!");
 }
 
-const bot = new Telegraf(token, { telegram: { webhookReply: false } });
+const bot = new Telegraf(token);
 bot.telegram.setWebhook(url);
 
 bot.on("text", (ctx) => {
