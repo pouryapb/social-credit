@@ -29,7 +29,9 @@ bot.on("sticker", async (ctx) => {
   const dir = ctx.message.sticker.file_unique_id === creditUpId ? 1 : -1;
 
   if (user.id === ctx.message.from.id)
-    return ctx.reply("You sneaky bastard! 😄");
+    return ctx.reply(
+      dir > 0 ? "You sneaky bastard! 😄" : "Why do you hate yourself? 🙁"
+    );
 
   await dbConnect();
 
