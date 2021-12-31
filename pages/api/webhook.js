@@ -24,7 +24,7 @@ bot.on("sticker", async (ctx) => {
     const dir = ctx.message.sticker.file_id === creditUpId ? 1 : -1;
 
     if (await Chat.findOne({ chatId: ctx.chat.id }).exec()) {
-      await Chat.findOneAndUpdate(
+      Chat.findOneAndUpdate(
         { "members.userId": user.id },
         { $inc: { "members.$.socialCredit": 20 * dir } }
       ).exec();
