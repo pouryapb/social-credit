@@ -4,7 +4,6 @@ import Chat from "../../models/chat";
 
 const token = process.env.BOT_TOKEN;
 const url = process.env.VERCEL_URL + "/api/webhook";
-const dbUrl = process.env.DB_URL;
 const creditUpId = process.env.CREDIT_UP_ID;
 const creditDownId = process.env.CREDIT_DOWN_ID;
 
