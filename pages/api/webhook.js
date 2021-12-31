@@ -23,7 +23,7 @@ bot.on("sticker", async (ctx) => {
     }
     if (![creditUpId, creditDownId].includes(ctx.message.sticker.file_id)) {
       console.log("Not a credit sticker");
-      ctx.replyWithMarkdownV2(
+      ctx.reply(
         `sticker id: ${ctx.message.sticker.file_id}\nenv up: ${creditUpId}\nenv down: ${creditDownId}`
       );
       return;
