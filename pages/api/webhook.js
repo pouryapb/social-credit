@@ -1,5 +1,4 @@
 import { Telegraf } from "telegraf";
-import mongoose from "mongoose";
 
 import Chat from "../../models/chat";
 
@@ -12,11 +11,6 @@ const creditDownId = process.env.CREDIT_DOWN_ID;
 if (token === undefined) {
   throw new Error("BOT_TOKEN must be provided!");
 }
-
-mongoose.connect(dbUrl, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
 
 const bot = new Telegraf(token);
 bot.telegram.setWebhook(url);
