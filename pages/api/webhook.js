@@ -117,6 +117,22 @@ bot.command("score", async (ctx) => {
   ctx.reply(`@${user.username}'s Social Credit is ${member.socialCredit}!`);
 });
 
+bot.command("list", async (ctx) => {
+  if (!["group", "supergroup"].includes(ctx.chat.type))
+    return ctx.reply("I only understand this command in groups!");
+
+  await dbConnect();
+
+  const chat = await Chat.findOne({ chatId: ctx.chat.id }).exec();
+
+  if (!chat)
+    return ctx.reply("All members in this group have 0 Social Credit!");
+
+  const members = chat.members.map((m) => `${m.username} (${m.socialCredit})`);
+
+  ctx.reply(`${members.join("\n")}\nEveryone else has 0 Social Credit!`);
+});
+
 export default async function handler(req, res) {
   try {
     await bot.handleUpdate(req.body);
