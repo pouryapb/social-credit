@@ -38,7 +38,13 @@ bot.on("sticker", async (ctx) => {
           if: { "$members.userId": { $in: [user.id] } },
           then: { $inc: { "members.$.socialCredit": 20 * dir } },
           else: {
-            $push: { members: { userId: user.id, socialCredit: 20 * dir } },
+            $push: {
+              members: {
+                userId: user.id,
+                username: user.username,
+                socialCredit: 20 * dir,
+              },
+            },
           },
         },
       }
