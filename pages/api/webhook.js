@@ -31,40 +31,45 @@ bot.on("sticker", async (ctx) => {
   const dir = ctx.message.sticker.file_unique_id === creditUpId ? 1 : -1;
 
   if (await Chat.findOne({ chatId: ctx.chat.id }).exec()) {
+    const sendResponse = (result) => {
+      const currentCredit = result.members.find(
+        (member) => member.userId === user.id
+      ).socialCredit;
+
+      ctx.reply(
+        `@${user.username}'s Social Credit was ${
+          dir > 0 ? "increased" : "decreased"
+        } to ${currentCredit}!`
+      );
+    };
+
+    // Update the user's social credit if exists
     Chat.findOneAndUpdate(
       { "members.userId": user.id },
       { $inc: { "members.$.socialCredit": 20 * dir } }
     )
       .exec()
-      .then(async (result) => {
-        let members;
-        if (result) members = result.members;
-        else {
-          await Chat.findOneAndUpdate(
-            { chatId: ctx.chat.id },
-            {
-              $push: {
-                members: {
-                  userId: user.id,
-                  username: user.username,
-                  socialCredit: 20 * dir,
-                },
-              },
-            }
-          ).then((chat) => {
-            members = chat.members;
-          });
-        }
-        const currentCredit = members.find(
-          (member) => member.userId === user.id
-        ).socialCredit;
+      .then(sendResponse);
 
-        ctx.reply(
-          `@${user.username}'s Social Credit was ${
-            dir > 0 ? "increased" : "decreased"
-          } to ${currentCredit}!`
-        );
-      });
+    // Create the user if it doesn't exist
+    Chat.findOneAndUpdate(
+      {
+        members: {
+          $not: { $elemMatch: { userId: user.id } },
+        },
+      },
+      {
+        $addToSet: {
+          members: {
+            userId: user.id,
+            username: user.username,
+            socialCredit: 20 * dir,
+          },
+        },
+      }
+    )
+      .exec()
+      .then(sendResponse);
   } else {
     const chat = new Chat({
       chatId: ctx.chat.id,
