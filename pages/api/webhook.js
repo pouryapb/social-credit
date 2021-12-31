@@ -49,14 +49,14 @@ bot.on("sticker", async (ctx) => {
     }).exec();
 
     if (docCount > 0) {
-      await Chat.updateOne(
+      await Chat.findOneAndUpdate(
         { chatId: ctx.chat.id, "members.userId": user.id },
         { $inc: { "members.$.socialCredit": 20 * dir } }
       )
         .exec()
         .then(sendResponse);
     } else {
-      await Chat.updateOne(
+      await Chat.findOneAndUpdate(
         { chatId: ctx.chat.id },
         {
           $push: {
