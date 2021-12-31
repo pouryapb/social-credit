@@ -14,7 +14,7 @@ if (token === undefined) {
 const bot = new Telegraf(token);
 bot.telegram.setWebhook(url);
 
-bot.on("sticker", (ctx) => {
+bot.on("sticker", async (ctx) => {
   if (["group", "supergroup"].includes(ctx.chat.type)) {
     if (!ctx.message.reply_to_message) return;
     if (![creditUpId, creditDownId].includes(ctx.message.sticker.file_id))
@@ -23,11 +23,11 @@ bot.on("sticker", (ctx) => {
     const user = ctx.message.reply_to_message.from;
     const dir = ctx.message.sticker.file_id === creditUpId ? 1 : -1;
 
-    if (Chat.findOne({ chatId: ctx.chat.id })) {
-      Chat.updateOne(
+    if (await Chat.findOne({ chatId: ctx.chat.id }).exec()) {
+      await Chat.findOneAndUpdate(
         { "members.userId": user.id },
         { $inc: { "members.$.socialCredit": 20 * dir } }
-      );
+      ).exec();
     } else {
       const chat = new Chat({
         chatId: ctx.chat.id,
