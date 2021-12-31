@@ -21,6 +21,8 @@ bot.on("sticker", async (ctx) => {
     if (![creditUpId, creditDownId].includes(ctx.message.sticker.file_id))
       return;
 
+    await dbConnect();
+
     const user = ctx.message.reply_to_message.from;
     const dir = ctx.message.sticker.file_id === creditUpId ? 1 : -1;
     const c = await Chat.findOne({ chatId: ctx.chat.id }).exec();
@@ -45,8 +47,6 @@ bot.on("sticker", async (ctx) => {
 });
 
 export default async function handler(req, res) {
-  await dbConnect();
-
   try {
     await bot.handleUpdate(req.body);
   } finally {
