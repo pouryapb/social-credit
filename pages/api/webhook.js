@@ -21,10 +21,12 @@ bot.on("sticker", async (ctx) => {
       console.log("No reply message");
       return;
     }
-    if (![creditUpId, creditDownId].includes(ctx.message.sticker.file_id)) {
+    if (
+      ![creditUpId, creditDownId].includes(ctx.message.sticker.file_unique_id)
+    ) {
       console.log("Not a credit sticker");
       ctx.reply(
-        `sticker id: ${ctx.message.sticker.file_id}\nenv up: ${creditUpId}\nenv down: ${creditDownId}`
+        `sticker id: ${ctx.message.sticker.file_unique_id}\nenv up: ${creditUpId}\nenv down: ${creditDownId}`
       );
       return;
     }
@@ -33,7 +35,7 @@ bot.on("sticker", async (ctx) => {
     console.log("Connected to DB");
 
     const user = ctx.message.reply_to_message.from;
-    const dir = ctx.message.sticker.file_id === creditUpId ? 1 : -1;
+    const dir = ctx.message.sticker.file_unique_id === creditUpId ? 1 : -1;
     const c = await Chat.findOne({ chatId: ctx.chat.id }).exec();
     if (c) {
       console.log("Chat found");
