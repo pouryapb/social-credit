@@ -1,5 +1,6 @@
 import { Telegraf } from "telegraf";
 
+import dbConnect from "../../lib/dbConnect";
 import Chat from "../../models/chat";
 
 const token = process.env.BOT_TOKEN;
@@ -44,6 +45,8 @@ bot.on("sticker", async (ctx) => {
 });
 
 export default async function handler(req, res) {
+  await dbConnect();
+
   try {
     await bot.handleUpdate(req.body);
   } finally {
