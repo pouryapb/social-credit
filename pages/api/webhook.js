@@ -43,33 +43,34 @@ bot.on("sticker", async (ctx) => {
       );
     };
 
-    // Update the user's social credit if exists
-    Chat.findOneAndUpdate(
-      { "members.userId": user.id },
-      { $inc: { "members.$.socialCredit": 20 * dir } }
-    )
-      .exec()
-      .then(sendResponse);
+    const docCount = await Chat.countDocuments({
+      chatId: ctx.chat.id,
+      "members.userId": user.id,
+    }).exec();
 
-    // Create the user if it doesn't exist
-    Chat.findOneAndUpdate(
-      {
-        members: {
-          $not: { $elemMatch: { userId: user.id } },
-        },
-      },
-      {
-        $addToSet: {
-          members: {
-            userId: user.id,
-            username: user.username,
-            socialCredit: 20 * dir,
+    if (docCount > 0) {
+      await Chat.updateOne(
+        { chatId: ctx.chat.id, "members.userId": user.id },
+        { $inc: { "members.$.socialCredit": 20 * dir } }
+      )
+        .exec()
+        .then(sendResponse);
+    } else {
+      await Chat.updateOne(
+        { chatId: ctx.chat.id },
+        {
+          $push: {
+            members: {
+              userId: user.id,
+              username: user.username,
+              socialCredit: 20 * dir,
+            },
           },
-        },
-      }
-    )
-      .exec()
-      .then(sendResponse);
+        }
+      )
+        .exec()
+        .then(sendResponse);
+    }
   } else {
     const chat = new Chat({
       chatId: ctx.chat.id,
