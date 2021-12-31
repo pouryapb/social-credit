@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
-const memberSchema = Schema({
-  userId: { type: Number, unique: true },
-  username: { type: String, unique: true },
+const memberSchema = new Schema({
+  userId: { type: Number, index: true },
+  username: { type: String, index: true },
   socialCredit: Number,
 });
 
-const chatSchema = Schema({
-  chatId: { typeL: Number, unique: true },
+const chatSchema = new Schema({
+  chatId: { typeL: Number, index: true },
   title: String,
   members: [memberSchema],
 });
