@@ -8,7 +8,7 @@ const memberSchema = new Schema({
 });
 
 const chatSchema = new Schema({
-  chatId: { typeL: Number, index: true },
+  chatId: { type: Number, index: true },
   title: String,
   members: [memberSchema],
 });
