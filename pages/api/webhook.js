@@ -128,9 +128,9 @@ bot.command("list", async (ctx) => {
   if (!chat)
     return ctx.reply("All members in this group have 0 Social Credit!");
 
-  const members = chat.members.map((m) => `${m.username} (${m.socialCredit})`);
+  const members = chat.members.map((m) => `@${m.username} (${m.socialCredit})`);
 
-  ctx.reply(`${members.join("\n")}\nEveryone else has 0 Social Credit!`);
+  ctx.reply(`${members.join("\n")}\n\nEveryone else has 0 Social Credit!`);
 });
 
 export default async function handler(req, res) {
