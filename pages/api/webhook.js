@@ -96,6 +96,27 @@ bot.on("sticker", async (ctx) => {
   }
 });
 
+bot.command("score", async (ctx) => {
+  if (!["group", "supergroup"].includes(ctx.chat.type))
+    return ctx.reply("I only understand this command in groups!");
+
+  if (!ctx.message.reply_to_message)
+    return ctx.reply("You need to reply someone!");
+
+  await dbConnect();
+
+  const user = ctx.message.reply_to_message.from;
+  const chat = await Chat.findOne({ chatId: ctx.chat.id }).exec();
+
+  if (!chat) return ctx.reply(`@${user.username}'s Social Credit is 0!`);
+
+  const member = chat.members.find((m) => m.userId === user.id);
+
+  if (!member) return ctx.reply(`@${user.username}'s Social Credit is 0!`);
+
+  ctx.reply(`@${user.username}'s Social Credit is ${member.socialCredit}!`);
+});
+
 export default async function handler(req, res) {
   try {
     await bot.handleUpdate(req.body);
