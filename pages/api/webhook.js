@@ -51,7 +51,8 @@ bot.on("sticker", async (ctx) => {
     if (docCount > 0) {
       await Chat.findOneAndUpdate(
         { chatId: ctx.chat.id, "members.userId": user.id },
-        { $inc: { "members.$.socialCredit": 20 * dir } }
+        { $inc: { "members.$.socialCredit": 20 * dir } },
+        { new: true }
       )
         .exec()
         .then(sendResponse);
@@ -66,7 +67,8 @@ bot.on("sticker", async (ctx) => {
               socialCredit: 20 * dir,
             },
           },
-        }
+        },
+        { new: true }
       )
         .exec()
         .then(sendResponse);
