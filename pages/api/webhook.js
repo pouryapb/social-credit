@@ -33,25 +33,29 @@ bot.on("sticker", async (ctx) => {
   if (await Chat.findOne({ chatId: ctx.chat.id }).exec()) {
     Chat.findOneAndUpdate(
       { "members.userId": user.id },
-      {
-        $cond: {
-          if: { "$members.userId": { $in: [user.id] } },
-          then: { $inc: { "members.$.socialCredit": 20 * dir } },
-          else: {
-            $push: {
-              members: {
-                userId: user.id,
-                username: user.username,
-                socialCredit: 20 * dir,
-              },
-            },
-          },
-        },
-      }
+      { $inc: { "members.$.socialCredit": 20 * dir } }
     )
       .exec()
-      .then((result) => {
-        const currentCredit = result.members.find(
+      .then(async (result) => {
+        let members;
+        if (result) members = result.members;
+        else {
+          await Chat.findOneAndUpdate(
+            { chatId: ctx.chat.id },
+            {
+              $push: {
+                members: {
+                  userId: user.id,
+                  username: user.username,
+                  socialCredit: 20 * dir,
+                },
+              },
+            }
+          ).then((chat) => {
+            members = chat.members;
+          });
+        }
+        const currentCredit = members.find(
           (member) => member.userId === user.id
         ).socialCredit;
 
