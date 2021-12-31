@@ -32,7 +32,7 @@ bot.on("sticker", async (ctx) => {
 
   if (await Chat.findOne({ chatId: ctx.chat.id }).exec()) {
     Chat.findOneAndUpdate(
-      { "members.userId": user.id },
+      { chatId: ctx.chat.id, "members.userId": user.id },
       { $inc: { "members.$.socialCredit": 20 * dir } },
       { upsert: true, new: true }
     )
