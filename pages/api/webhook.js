@@ -106,6 +106,9 @@ bot.command("score", async (ctx) => {
   if (!ctx.message.reply_to_message)
     return ctx.reply("You need to reply someone!");
 
+  if (ctx.message.reply_to_message.id === ctx.botInfo.id)
+    return ctx.reply("I'm just a score keeper! 🤓");
+
   await dbConnect();
 
   const user = ctx.message.reply_to_message.from;
