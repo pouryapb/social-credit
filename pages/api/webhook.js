@@ -126,22 +126,22 @@ bot.command("list", async (ctx) => {
 
   await dbConnect();
 
-  const chat = await Chat.findOne({ chatId: ctx.chat.id })
-    .sort({ "members.socialCredit": -1 })
-    .exec();
+  const chat = await Chat.findOne({ chatId: ctx.chat.id }).exec();
 
   if (!chat)
     return ctx.reply("All members in this group have 0 Social Credit!");
 
-  const members = chat.members.map((m, index) => {
-    let rank = index + 1;
-    if (rank === 1) rank = "🥇.";
-    else if (rank === 2) rank = "🥈.";
-    else if (rank === 3) rank = "🥉.";
-    else rank = `${rank}.`;
+  const members = chat.members
+    .sort((a, b) => b.socialCredit - a.socialCredit)
+    .map((m, index) => {
+      let rank = index + 1;
+      if (rank === 1) rank = "🥇.";
+      else if (rank === 2) rank = "🥈.";
+      else if (rank === 3) rank = "🥉.";
+      else rank = `${rank}.`;
 
-    return `${rank} @${m.username} (${m.socialCredit})`;
-  });
+      return `${rank} @${m.username} (${m.socialCredit})`;
+    });
 
   const totalMembers = await ctx.getChatMembersCount();
 
