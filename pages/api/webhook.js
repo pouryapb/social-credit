@@ -33,6 +33,9 @@ bot.on("sticker", async (ctx) => {
       dir > 0 ? "You sneaky bastard! 😄" : "Why do you hate yourself? 🙁"
     );
 
+  if (user.id === ctx.botInfo.id)
+    return ctx.reply(dir > 0 ? "How generous! ☺️" : "What did I do? 🙁");
+
   await dbConnect();
 
   if (await Chat.findOne({ chatId: ctx.chat.id }).exec()) {
@@ -123,14 +126,32 @@ bot.command("list", async (ctx) => {
 
   await dbConnect();
 
-  const chat = await Chat.findOne({ chatId: ctx.chat.id }).exec();
+  const chat = await Chat.findOne({ chatId: ctx.chat.id })
+    .sort({ "members.socialCredit": -1 })
+    .exec();
 
   if (!chat)
     return ctx.reply("All members in this group have 0 Social Credit!");
 
-  const members = chat.members.map((m) => `@${m.username} (${m.socialCredit})`);
+  const members = chat.members.map((m, index) => {
+    let rank = index + 1;
+    if (rank === 1) rank = "🥇.";
+    else if (rank === 2) rank = "🥈.";
+    else if (rank === 3) rank = "🥉.";
+    else rank = `${rank}.`;
 
-  ctx.reply(`${members.join("\n")}\n\nEveryone else has 0 Social Credit!`);
+    return `${rank} @${m.username} (${m.socialCredit})`;
+  });
+
+  const totalMembers = await ctx.getChatMembersCount();
+
+  ctx.reply(
+    `${members.join("\n")}${
+      totalMembers - 1 - members.length !== 0
+        ? "\n\nEveryone else has 0 Social Credit!"
+        : ""
+    }`
+  );
 });
 
 export default async function handler(req, res) {
