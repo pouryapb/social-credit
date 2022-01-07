@@ -150,7 +150,7 @@ bot.command("list", async (ctx) => {
         if (!firstName) {
           const member = await ctx.getChatMember(m.userId);
           firstName = member.user.first_name;
-          await updateUser(m.userId, firstName);
+          updateUser(m.userId, firstName);
         }
 
         let rank = index + 1;
