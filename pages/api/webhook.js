@@ -154,9 +154,9 @@ bot.command("list", async (ctx) => {
         }
 
         let rank = index + 1;
-        if (rank === 1) rank = "🥇.";
-        else if (rank === 2) rank = "🥈.";
-        else if (rank === 3) rank = "🥉.";
+        if (rank === 1) rank = "🥇";
+        else if (rank === 2) rank = "🥈";
+        else if (rank === 3) rank = "🥉";
         else rank = `${rank}.`;
 
         return `${rank} ${firstName} (${m.socialCredit})`;
