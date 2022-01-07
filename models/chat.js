@@ -4,6 +4,7 @@ const { Schema, model } = mongoose;
 const memberSchema = new Schema({
   userId: { type: Number, index: true },
   username: { type: String, index: true },
+  first_name: { type: String, index: true },
   socialCredit: Number,
 });
 
