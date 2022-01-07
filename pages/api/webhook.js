@@ -146,9 +146,9 @@ bot.command("list", async (ctx) => {
       .sort((a, b) => b.socialCredit - a.socialCredit)
       .map(async (m, index) => {
         let firstName = m.first_name;
+        const member = await ctx.getChatMember(m.userId);
 
-        if (!firstName) {
-          const member = await ctx.getChatMember(m.userId);
+        if (!firstName || firstName !== member.user.first_name) {
           firstName = member.user.first_name;
           updateUser(m.userId, firstName);
         }
